@@ -44,15 +44,16 @@
 #include "esp_crt_bundle.h"
 
 /* Constants that aren't configurable in menuconfig */
-#define WEB_SERVER "www.howsmyssl.com"
+#define WEB_SERVER "dweet.io"
 #define WEB_PORT "443"
-#define WEB_URL "https://www.howsmyssl.com/a/check"
+#define WEB_URL "https://dweet.io/dweet/for/jbdhsuk"
 
 static const char *TAG = "example";
 
-static const char REQUEST[] = "GET " WEB_URL " HTTP/1.1\r\n"
+static const char REQUEST[] = "POST " WEB_URL " HTTP/1.1\r\n"
                              "Host: "WEB_SERVER"\r\n"
                              "User-Agent: esp-idf/1.0 esp32\r\n"
+                             "hello=world\r\n"
                              "\r\n";
 
 /* Root cert for howsmyssl.com, taken from server_root_cert.pem
