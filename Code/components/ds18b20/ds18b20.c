@@ -342,7 +342,7 @@ void reset_search() {
 // Return TRUE  : device found, ROM number in ROM_NO buffer
 //        FALSE : device not found, end of search
 
-bool search(uint8_t *newAddr, bool search_mode) {
+bool ds18b20_search(uint8_t *newAddr, bool search_mode) {
 	uint8_t id_bit_number;
 	uint8_t last_zero, rom_byte_number;
 	bool search_result;
