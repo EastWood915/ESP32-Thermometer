@@ -45,16 +45,16 @@
 
 /* Constants that aren't configurable in menuconfig */
 #define WEB_SERVER "dweet.io"
-#define WEB_PORT "443"
-#define WEB_URL "https://dweet.io/dweet/for/jbdhsuk"
+#define WEB_URL "https://dweet.io/dweet/for/jbdhsuk?hello=world"
 
 static const char *TAG = "example";
 
-static const char REQUEST[] = "POST " WEB_URL " HTTP/1.1\r\n"
+/*
+static const char REQUEST[] = "GET " WEB_URL " HTTP/1.1\r\n"
                              "Host: "WEB_SERVER"\r\n"
                              "User-Agent: esp-idf/1.0 esp32\r\n"
-                             "hello=world\r\n"
                              "\r\n";
+*/
 
 /* Root cert for howsmyssl.com, taken from server_root_cert.pem
 
@@ -68,70 +68,39 @@ static const char REQUEST[] = "POST " WEB_URL " HTTP/1.1\r\n"
 */
 
 
-static void https_get_request(esp_tls_cfg_t cfg)
+static void https_get_request(esp_tls_cfg_t cfg, char *url, char *host)
 {
     char buf[512];
     int ret, len;
 
+    len = sprintf(buf, "GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: esp-idf/1.0 esp32\r\n\r\n", url, host);
+
     struct esp_tls *tls = esp_tls_conn_http_new(WEB_URL, &cfg);
 
-    if (tls != NULL) {
+    if (tls != NULL) 
+    {
         ESP_LOGI(TAG, "Connection established...");
-    } else {
-        ESP_LOGE(TAG, "Connection failed...");
-        goto exit;
-    }
-
-    size_t written_bytes = 0;
+        size_t written_bytes = 0;
     do {
         ret = esp_tls_conn_write(tls,
-                                 REQUEST + written_bytes,
-                                 sizeof(REQUEST) - written_bytes);
+                                 buf + written_bytes,
+                                 len - written_bytes);
         if (ret >= 0) {
             ESP_LOGI(TAG, "%d bytes written", ret);
             written_bytes += ret;
         } else if (ret != ESP_TLS_ERR_SSL_WANT_READ  && ret != ESP_TLS_ERR_SSL_WANT_WRITE) {
             ESP_LOGE(TAG, "esp_tls_conn_write  returned: [0x%02X](%s)", ret, esp_err_to_name(ret));
-            goto exit;
-        }
-    } while (written_bytes < sizeof(REQUEST));
-
-    ESP_LOGI(TAG, "Reading HTTP response...");
-
-    do {
-        len = sizeof(buf) - 1;
-        bzero(buf, sizeof(buf));
-        ret = esp_tls_conn_read(tls, (char *)buf, len);
-
-        if (ret == ESP_TLS_ERR_SSL_WANT_WRITE  || ret == ESP_TLS_ERR_SSL_WANT_READ) {
-            continue;
-        }
-
-        if (ret < 0) {
-            ESP_LOGE(TAG, "esp_tls_conn_read  returned [-0x%02X](%s)", -ret, esp_err_to_name(ret));
             break;
         }
-
-        if (ret == 0) {
-            ESP_LOGI(TAG, "connection closed");
-            break;
-        }
-
-        len = ret;
-        ESP_LOGD(TAG, "%d bytes read", len);
-        /* Print response directly to stdout as it is read */
-        for (int i = 0; i < len; i++) {
-            putchar(buf[i]);
-        }
-        putchar('\n'); // JSON output doesn't have a newline at end
-    } while (1);
-
-exit:
-    esp_tls_conn_delete(tls);
-    for (int countdown = 10; countdown >= 0; countdown--) {
-        ESP_LOGI(TAG, "%d...", countdown);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    } while (written_bytes < len);
+    } 
+    else 
+    {
+        ESP_LOGE(TAG, "Connection failed...");
     }
+
+    esp_tls_conn_delete(tls);
+    ESP_LOGI(TAG, "Connection closed.")
 }
 
 static void https_get_request_using_crt_bundle(void)
@@ -140,7 +109,7 @@ static void https_get_request_using_crt_bundle(void)
     esp_tls_cfg_t cfg = {
         .crt_bundle_attach = esp_crt_bundle_attach,
     };
-    https_get_request(cfg);
+    https_get_request(cfg, WEB_URL, WEB_SERVER);
 }
 
 static void https_request_task(void *pvparameters)
