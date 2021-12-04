@@ -46,35 +46,7 @@ static const uint8_t dscrc2x16_table[] = {
 /* *INDENT-ON* */
 
 void ds18b20_init(int GPIO);
-
-#define ds18b20_send ds18b20_write
-#define ds18b20_send_byte ds18b20_write_byte
-#define ds18b20_RST_PULSE ds18b20_reset
-
-void ds18b20_write(char bit);
-unsigned char ds18b20_read(void);
-void ds18b20_write_byte(char data);
-unsigned char ds18b20_read_byte(void);
-unsigned char ds18b20_reset(void);
-
-bool ds18b20_setResolution(const DeviceAddress tempSensorAddresses[], int numAddresses, uint8_t newResolution);
-bool ds18b20_isConnected(const DeviceAddress *deviceAddress, uint8_t *scratchPad);
-void ds18b20_writeScratchPad(const DeviceAddress *deviceAddress, const uint8_t *scratchPad);
-bool ds18b20_readScratchPad(const DeviceAddress *deviceAddress, uint8_t *scratchPad);
-void ds18b20_select(const DeviceAddress *address);
-uint8_t ds18b20_crc8(const uint8_t *addr, uint8_t len);
-bool ds18b20_isAllZeros(const uint8_t * const scratchPad);
-bool isConversionComplete();
-uint16_t millisToWaitForConversion();
-
-void ds18b20_requestTemperatures();
-float ds18b20_getTempF(const DeviceAddress *deviceAddress);
-float ds18b20_getTempC(const DeviceAddress *deviceAddress);
-int16_t calculateTemperature(const DeviceAddress *deviceAddress, uint8_t* scratchPad);
-float ds18b20_get_temp(void);
-
-void reset_search();
-bool ds18b20_search(uint8_t *newAddr, bool search_mode);
+float ds18b20_getTempC(void);
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus
