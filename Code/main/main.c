@@ -44,10 +44,12 @@
 #include "esp_crt_bundle.h"
 
 /* Constants that aren't configurable in menuconfig */
+/*
 #define WEB_SERVER "dweet.io"
 #define WEB_URL "https://dweet.io/dweet/for/jbdhsuk?hello=world"
+*/
 
-static const char *TAG = "example";
+static const char *TAG = "dweet";
 
 /*
 static const char REQUEST[] = "GET " WEB_URL " HTTP/1.1\r\n"
@@ -67,6 +69,21 @@ static const char REQUEST[] = "GET " WEB_URL " HTTP/1.1\r\n"
    in the component.mk COMPONENT_EMBED_TXTFILES variable.
 */
 
+void dweet_send(char *thing, char *key, char *value);
+static void https_get_request(esp_tls_cfg_t cfg, char *url, char *host);
+
+
+void dweet_send(char *thing, char *key, char *value)
+{
+    esp_tls_cfg_t cfg = {
+        .crt_bundle_attach = esp_crt_bundle_attach,
+    };
+    char url[256];
+
+    (void)sprintf(url, "https://dweet.io/dweet/for/%s?%s=%s", thing, key, value);
+    https_get_request(cfg, url, "dweet.io");
+}
+
 
 static void https_get_request(esp_tls_cfg_t cfg, char *url, char *host)
 {
@@ -75,7 +92,7 @@ static void https_get_request(esp_tls_cfg_t cfg, char *url, char *host)
 
     len = sprintf(buf, "GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: esp-idf/1.0 esp32\r\n\r\n", url, host);
 
-    struct esp_tls *tls = esp_tls_conn_http_new(WEB_URL, &cfg);
+    struct esp_tls *tls = esp_tls_conn_http_new(url, &cfg);
 
     if (tls != NULL) 
     {
@@ -100,26 +117,7 @@ static void https_get_request(esp_tls_cfg_t cfg, char *url, char *host)
     }
 
     esp_tls_conn_delete(tls);
-    ESP_LOGI(TAG, "Connection closed.")
-}
-
-static void https_get_request_using_crt_bundle(void)
-{
-    ESP_LOGI(TAG, "https_request using crt bundle");
-    esp_tls_cfg_t cfg = {
-        .crt_bundle_attach = esp_crt_bundle_attach,
-    };
-    https_get_request(cfg, WEB_URL, WEB_SERVER);
-}
-
-static void https_request_task(void *pvparameters)
-{
-    ESP_LOGI(TAG, "Start https_request example");
-
-    https_get_request_using_crt_bundle();
-
-    ESP_LOGI(TAG, "Finish https_request example");
-    vTaskDelete(NULL);
+    ESP_LOGI(TAG, "Connection closed.");
 }
 
 void app_main(void)
@@ -134,5 +132,6 @@ void app_main(void)
      */
     ESP_ERROR_CHECK(example_connect());
 
-    xTaskCreate(&https_request_task, "https_get_task", 8192, NULL, 5, NULL);
+    //xTaskCreate(&https_request_task, "https_get_task", 8192, NULL, 5, NULL);
+    dweet_send("jbdhsuk", "hello", "world");
 }
