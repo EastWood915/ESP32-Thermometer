@@ -11,6 +11,11 @@
     "idf.pythonBinPath": "/home/wojciech/.espressif/python_env/idf4.3_py3.8_env/bin/python",
     "idf.toolsPath": "/home/wojciech/.espressif",
     "files.associations": {
-        "task.h": "c"
+        "task.h": "c",
+        "esp_wifi.h": "c",
+        "esp_log.h": "c",
+        "esp_system.h": "c",
+        "nvs_flash.h": "c",
+        "esp_tls.h": "c"
     }
 }
