@@ -86,6 +86,13 @@ void led_rgb_set(led_rgb_color_t color, uint32_t mode)
             ledc_set_duty(LED_RGB_MODE, LED_RGB_CHANNEL_BLUE, mode);
             ESP_LOGI(TAG, "Set to blue");
             break;
+
+        case LED_RGB_YELLOW:
+            ledc_set_duty(LED_RGB_MODE, LED_RGB_CHANNEL_RED, mode);
+            ledc_set_duty(LED_RGB_MODE, LED_RGB_CHANNEL_GREEN, mode);
+            ledc_set_duty(LED_RGB_MODE, LED_RGB_CHANNEL_BLUE, LED_RGB_OFF);
+            ESP_LOGI(TAG, "Set to yellow");
+            break;
     }
 
     ledc_update_duty(LED_RGB_MODE, LED_RGB_CHANNEL_RED);

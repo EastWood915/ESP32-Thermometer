@@ -16,7 +16,8 @@
 typedef enum led_rgb_color_t {
     LED_RGB_RED,
     LED_RGB_GREEN,
-    LED_RGB_BLUE
+    LED_RGB_BLUE,
+    LED_RGB_YELLOW
 } led_rgb_color_t;
 
 /**********  EXPORTED FUNCTIONS  **********/
