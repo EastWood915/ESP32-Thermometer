@@ -2,7 +2,7 @@ function displayTemperature(temperature)
 {
     console.log("Temperature: " + temperature);
     document.querySelector("span.spinner-border").style.visibility = "hidden";
-    document.querySelector("span.temperature").textContent = temperature;
+    document.querySelector("h1.temperature").textContent = temperature;
 }
 
 fetch('https://dweet.io/get/latest/dweet/for/jbdhsuk')
