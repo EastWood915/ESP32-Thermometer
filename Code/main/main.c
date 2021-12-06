@@ -32,11 +32,11 @@ void app_main(void)
         (void)sprintf(stemp, "%.2f", temp);
         dweet_send("jbdhsuk", "temperature", stemp);
 
-        led_rgb_set(LED_RGB_RED);
+        led_rgb_set(LED_RGB_RED, LED_RGB_ON);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        led_rgb_set(LED_RGB_GREEN);
+        led_rgb_set(LED_RGB_GREEN, LED_RGB_ON);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
-        led_rgb_set(LED_RGB_BLUE);
+        led_rgb_set(LED_RGB_BLUE, LED_RGB_BLINK);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
