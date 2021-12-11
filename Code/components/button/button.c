@@ -62,8 +62,8 @@ void button_main_function()
 
             break;
 
-        case default:
-        
+        default:
+
             button_state = BUTTON_RELEASED;
             break;
     }

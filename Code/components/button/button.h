@@ -3,7 +3,7 @@
 
 /*************  CONFIGURATION  *************/
 
-#define BUTTON_PIN            (2u)
+#define BUTTON_PIN            (5u)
 #define BUTTON_FILTER_PERIOD  (3u)
 
 /*******  EXPORTED MACROS AND TYPES  *******/
