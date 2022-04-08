@@ -308,7 +308,6 @@ NoConn ~ 6300 4000
 NoConn ~ 6300 3900
 NoConn ~ 6300 3800
 NoConn ~ 6300 3700
-NoConn ~ 6300 3550
 NoConn ~ 6300 3500
 NoConn ~ 6300 3400
 NoConn ~ 2600 3650
