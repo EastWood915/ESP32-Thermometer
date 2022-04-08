@@ -34,10 +34,10 @@ void app_main(void)
 
     led_rgb_init();
     led_rgb_set(LED_RGB_YELLOW, LED_RGB_ON);
-    ESP_ERROR_CHECK(example_connect());
     ds18b20_init(15);
     button_init();
     xTaskCreate(&task_button, "TASK_BUTTON", 1024, NULL, 20, NULL);
+    ESP_ERROR_CHECK(example_connect());
     led_rgb_set(LED_RGB_GREEN, LED_RGB_ON);
     
 
