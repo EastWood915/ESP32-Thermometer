@@ -8,7 +8,7 @@
         "boards/esp32-wrover-kit-3.3v.cfg"
     ],
     "idf.port": "/dev/ttyUSB0",
-    "idf.pythonBinPath": "/home/wojciech/.espressif/python_env/idf4.3_py3.8_env/bin/python",
+    "idf.pythonBinPath": "/home/wojciech/.espressif/python_env/idf4.3_py3.10_env/bin/python",
     "idf.toolsPath": "/home/wojciech/.espressif",
     "files.associations": {
         "task.h": "c",
