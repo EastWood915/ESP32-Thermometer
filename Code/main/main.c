@@ -13,6 +13,7 @@
 
 #include "esp_netif.h"
 #include "esp_event.h"
+#include "esp_log.h"
 
 typedef enum 
 {
@@ -37,7 +38,7 @@ void task_button(void * pvParameters)
 
 void task_main(void * pvParameters)
 {
-    static StateMachine_State_t state_machine_state;
+    static StateMachine_State_t state_machine_state = STATE_MACHINE_INIT;
     static float temp;
     static float temp_filtered = 0;
     static char stemp[8];
@@ -46,6 +47,7 @@ void task_main(void * pvParameters)
 
     while(1)
     {
+        ESP_LOGI("task_main", "state = %X", state_machine_state);
         switch(state_machine_state)
         {
             case STATE_MACHINE_INIT:
@@ -90,7 +92,7 @@ void task_main(void * pvParameters)
                 loop_ctr++;
 
                 /* If proper time elapsed, send data */
-                if (10 >= loop_ctr)
+                if (10 <= loop_ctr)
                 {
                     (void)sprintf(stemp, "%.2f", temp_filtered);
                     dweet_send("jbdhsuk", "temperature", stemp);
@@ -104,7 +106,7 @@ void task_main(void * pvParameters)
                 }
 
                 /* Check for failures */
-                if (5 >= fault_ctr) 
+                if (5 <= fault_ctr) 
                 {
                     led_rgb_set(LED_RGB_RED, LED_RGB_ON);
                     state_machine_state = STATE_MACHINE_FAULT_SENSOR;
@@ -158,7 +160,7 @@ void task_init(void)
     ds18b20_init(15);
     button_init();
     xTaskCreate(&task_button, "TASK_BUTTON", 1024, NULL, 20, NULL);
-    xTaskCreate(&task_main, "TASK_MAIN", 1024, NULL, 10, NULL);
+    xTaskCreate(&task_main, "TASK_MAIN", 4096, NULL, 10, NULL);
 }
 
 void app_main(void)
