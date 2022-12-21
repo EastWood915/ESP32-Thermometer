@@ -116,7 +116,7 @@ void task_main(void * pvParameters)
                 break;
 
             case STATE_MACHINE_WPS:
-                led_rgb_set(LED_RGB_BLUE, LED_RGB_ON);
+                esp_restart();
                 break;
 
             case STATE_MACHINE_FAULT_SENSOR:
@@ -156,7 +156,7 @@ void task_init(void)
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     led_rgb_init();
-    led_rgb_set(LED_RGB_YELLOW, LED_RGB_ON);
+    led_rgb_set(LED_RGB_BLUE, LED_RGB_ON);
     ds18b20_init(15);
     button_init();
     xTaskCreate(&task_button, "TASK_BUTTON", 1024, NULL, 20, NULL);
